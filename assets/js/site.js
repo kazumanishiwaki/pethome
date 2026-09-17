@@ -65,14 +65,20 @@
     });
   });
 
+  document.querySelectorAll('a[href^="mailto:hello@example.com"]').forEach((link) => {
+    link.setAttribute('href', '#contact');
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
   const form = document.querySelector('.mvp-form');
   if (form) {
+    form.setAttribute('action', '#');
     form.addEventListener('submit', (event) => {
-      const action = form.getAttribute('action') || '';
-      if (action.includes('hello@example.com')) {
-        event.preventDefault();
-        window.alert('MVP受付フォームは準備中です。公開前にTallyまたはFormspreeへ接続します。');
-      }
+      event.preventDefault();
+      window.alert('MVP受付フォームは準備中です。公開前にTally / Formspree / Cloudflare Workers等の実フォームへ接続します。');
     });
   }
 
