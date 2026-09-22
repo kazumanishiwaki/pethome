@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+# HTML pages carry noindex while the service is a pre-launch preview.

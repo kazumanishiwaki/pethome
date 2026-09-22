@@ -1,66 +1,45 @@
-# pethome
+# pethome — service concept preview
 
-既製品から始める、ペット空間のオンライン設計サービスのMVPサイトです。
+2026-09-22 content review. Plain HTML/CSS/JavaScript, no build dependency.
 
 ## Positioning
 
-- ペット用品ECではなく「空間プラン」起点
-- 自社在庫を持たず、国内で調達しやすい既製品をメーカー横断で選定
-- オンラインで写真・条件を整理し、必要に応じて地域施工パートナーへ引き継ぐ
-- 初期商品は CAT: 壁面ステップ / 脱走対策、DOG: ゲート / 滑りに配慮した床
-- 施工契約は顧客と地域施工店の直接契約を基本とする想定
+既製品を売るのではなく、商品選定・既存家具との配置・取付前の確認を整理する空間プランニング。初期は猫の壁面／猫の出入口／犬の室内の居場所。床全面張り替え・屋外工事・大規模造作は標準範囲から外す。
 
-## Files
+商品・場所が決まっている取付相談と、組み合わせを考える空間プランを区分する。正式料金・施工店・受付先は未確定なので、販売価格や提携実績を表示しない。
 
-```text
-/
-├── index.html
-├── privacy.html
-├── terms.html
-├── commercial.html
-├── assets/
-│   ├── css/site.css
-│   └── js/site.js
-├── data/products.json
-├── .github/workflows/pages.yml
-└── .nojekyll
-```
+## Current behavior
+
+- Pre-launch notice is visible. No contact transmission, photo upload, payment, analytics, or browser storage.
+- Self-check computes a general starting point in the browser and can save a text memo. It is not a safety diagnosis or quotation.
+- Product references are in `data/products.json`; no affiliation or stock is asserted.
+- Illustrations are explicitly conceptual, not completed works or installation drawings.
+- The original `site.css` is retained; scoped content refinements are in `review.css`.
 
 ## Local preview
 
-`fetch()` で `data/products.json` を読むため、file:// 直開きではなく簡易HTTPサーバーを使用します。
-
-```bash
-python3 -m http.server 8080
+```sh
+python3 scripts/build.py
+python3 -m http.server 8080 --directory dist
 ```
 
-Then open `http://localhost:8080/`.
+Open http://localhost:8080/ . Use an HTTP server for the product JSON; do not rely on file://.
 
-## GitHub Pages
+## Publishing
 
-Workflow is prepared for GitHub Pages.
+GitHub Pages: Settings → Pages → Source: GitHub Actions. The workflow builds and validates before publishing `dist` only. An independent `pethome-preview` artifact remains available even if Pages is not enabled.
 
-1. Repository `Settings` → `Pages`
-2. `Build and deployment` → `Source` を `GitHub Actions` に設定
-3. `main` へ push すると `.github/workflows/pages.yml` がデプロイ
+Public repository visibility does not itself enable Pages. The connector used for content edits does not expose Pages administration. Do not add elevated tokens to the repository or workflow to work around setup.
 
-このリポジトリは作成時点で private のため、契約プランによっては Pages 公開条件を満たすために repository visibility の変更が必要です。
+GitHub Pages restricts hosting online businesses or sites primarily facilitating commercial transactions. This repository contains a non-transactional, pre-launch concept preview. Confirm the actual use against the policy; use a suitable host such as Cloudflare for the customer-acquisition/ordering service rather than assuming that no checkout means all commercial use is allowed.
 
-## Before public launch
+- https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
+- https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
 
-- [ ] フォームを Tally / Formspree / Cloudflare Workers 等の実バックエンドへ接続
-- [ ] `hello@example.com` 等の仮リンクを削除（初版JSでは送信を停止）
-- [ ] 運営主体・住所・電話番号を `commercial.html` に記載
-- [ ] `privacy.html` を実際のAI・フォーム・保存先に合わせて確定
-- [ ] `terms.html` に有料プランのキャンセル/修正回数/納期を追加
-- [ ] 実績写真または許諾済み/自社生成のBefore/Afterビジュアルへ差し替え
-- [ ] 商品価格・仕様を公開直前にメーカー公式情報で再確認
-- [ ] 施工パートナーの保険・経験・対応エリアを確認
+For Cloudflare, use the static `dist` directory. No vendor-specific runtime is required.
 
-## Product data policy
+## Before accepting enquiries
 
-`data/products.json` は提案用の商品候補DBです。価格・仕様は固定値として保証せず、必ずメーカー・販売元の最新情報を優先します。
+Confirm operator and contact information, privacy/AI processing and retention, service and cancellation terms, actual partner coverage and insurance, procurement/returns responsibilities, and validated pricing. Implement and test a real private intake endpoint. Remove noindex only after the launch review. Do not collect room photos through public GitHub issues.
 
-## Safety wording
-
-オンラインプランは完成イメージ・商品配置の提案です。壁内部の構造、下地、施工可否を保証するものではありません。施工前に施工パートナーが現地確認し、メーカー施工基準に従って固定方法を決定します。
+Keep internal margin assumptions, client data, credentials, and partner-negotiation details outside this public repository.
