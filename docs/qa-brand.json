@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-22",
+  "method": "Local source bytes rendered offline with Chromium and Playwright. Production CSS and JavaScript; local JSON fixture responses.",
+  "html_blob": "65a4ead1d4e309bb9d799d45497bc98bde483c66",
+  "css_blob": "9d07fcf80b408a27ab96be45abd4b05da7ad7d50",
+  "viewport_widths": [320,390,640,768,1024,1440],
+  "horizontal_overflow": false,
+  "broken_images": 0,
+  "javascript_errors": 0,
+  "question_combinations": 192,
+  "result_variants": 8,
+  "care_first_priority": "passed",
+  "absence_block": "passed",
+  "product_filter_counts": {"cat":3,"dog":2,"floor":1,"all":6},
+  "local_txt_download": "pethome-note.txt",
+  "plan_prefill": "passed",
+  "live_delivery": "Verified separately by the deployment workflow; not asserted by this local test."
+}
