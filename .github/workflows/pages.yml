@@ -15,12 +15,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Validate and build public files
+      - name: Validate pages, images and all self-check content
         run: python3 scripts/build.py
-      - name: Check JavaScript syntax
-        run: node --check assets/js/site.js
       - name: Save independently downloadable preview
         uses: actions/upload-artifact@v4
         with:
@@ -34,15 +33,22 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Setup Pages (must first be enabled in repository Settings)
+      - uses: actions/checkout@v4
+      - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Deploy preview
+      - name: Deploy preview and AI review pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify actual public HTML, review text and image files
+        env:
+          PUBLIC_SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 scripts/check_published.py "$PUBLIC_SITE_URL"
