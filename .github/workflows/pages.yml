@@ -1,39 +1,32 @@
 name: Validate and publish pethome preview
-
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Validate pages, images and all self-check content
+      - name: Validate HTML and all 192 combinations of the four-question check
         run: python3 scripts/build.py
-      - name: Save independently downloadable preview
+      - name: Save downloadable static HTML
         uses: actions/upload-artifact@v4
         with:
           name: pethome-preview
           path: dist
           include-hidden-files: true
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     permissions:
       contents: read
       pages: write
@@ -43,12 +36,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Deploy preview and AI review pages
+      - name: Prepare deterministic delivery checks
+        run: python3 scripts/build.py
+      - uses: actions/configure-pages@v5
+      - name: Deploy updated HTML and review exports
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Verify actual public HTML, review text and image files
+      - name: Verify published copy, four-question data and image bytes
         env:
-          PUBLIC_SITE_URL: ${{ steps.deployment.outputs.page_url }}
-        run: python3 scripts/check_published.py "$PUBLIC_SITE_URL"
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 scripts/check_published.py "$SITE_URL"
