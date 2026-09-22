@@ -1,50 +1,82 @@
 [
   {
-    "path": "assets/img/cat-wall.webp",
-    "sha256": "43ee34a6ae9b79c0cba4ed6c283900075bc27d64d24d39dc1d625669161da960",
-    "width": 1408,
-    "height": 1056,
-    "bytes": 149838,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
-  },
-  {
-    "path": "assets/img/cat-wall-small.webp",
-    "sha256": "f673ca5b69ed7699bf1117e4dbf193dc2c8e542fc7019aa3c9a06bdbd59281ef",
-    "width": 704,
-    "height": 528,
-    "bytes": 44488,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
-  },
-  {
-    "path": "assets/img/cat-entrance.webp",
-    "sha256": "44409d55f6ad3891273e5c25158b374f5b4c4a020f2483838dcaccdb6efc45b2",
-    "width": 1408,
-    "height": 1056,
-    "bytes": 118962,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
-  },
-  {
     "path": "assets/img/cat-entrance-small.webp",
-    "sha256": "35da2a3bc15a6df5cc0506d4e99a024b6048c247f9015825ebbe8b4813919edb",
     "width": 704,
     "height": 528,
     "bytes": 39110,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
+    "sha256": "35da2a3bc15a6df5cc0506d4e99a024b6048c247f9015825ebbe8b4813919edb",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
   },
   {
-    "path": "assets/img/dog-living.webp",
-    "sha256": "8eca9d5b0fe3551986672fb8cec06668beae5212ed12e362e6237a966f1f56f1",
+    "path": "assets/img/cat-entrance.webp",
     "width": 1408,
     "height": 1056,
-    "bytes": 169110,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
+    "bytes": 118962,
+    "sha256": "44409d55f6ad3891273e5c25158b374f5b4c4a020f2483838dcaccdb6efc45b2",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/cat-wall-small.webp",
+    "width": 704,
+    "height": 528,
+    "bytes": 44488,
+    "sha256": "f673ca5b69ed7699bf1117e4dbf193dc2c8e542fc7019aa3c9a06bdbd59281ef",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/cat-wall.webp",
+    "width": 1408,
+    "height": 1056,
+    "bytes": 149838,
+    "sha256": "43ee34a6ae9b79c0cba4ed6c283900075bc27d64d24d39dc1d625669161da960",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/cat-window-small.webp",
+    "width": 704,
+    "height": 402,
+    "bytes": 16446,
+    "sha256": "3bf7a111c296f1ad90ff0cf1f18b28f2e8c0274532168b23458386ae2266f8c0",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/cat-window.webp",
+    "width": 1344,
+    "height": 768,
+    "bytes": 52626,
+    "sha256": "e2eef667fe722451a096fd713bb6df4d1644cf32322c36a53e6606aa7433388d",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
   },
   {
     "path": "assets/img/dog-living-small.webp",
-    "sha256": "a38b8a5ab10baa073d3c10836408f8c0ce76db21fedbfb2a64189136b4d5a197",
     "width": 704,
     "height": 528,
     "bytes": 52384,
-    "origin": "AI-generated concept image; not installation evidence or product photography"
+    "sha256": "a38b8a5ab10baa073d3c10836408f8c0ce76db21fedbfb2a64189136b4d5a197",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/dog-living.webp",
+    "width": 1408,
+    "height": 1056,
+    "bytes": 169110,
+    "sha256": "8eca9d5b0fe3551986672fb8cec06668beae5212ed12e362e6237a966f1f56f1",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/hero-night-small.webp",
+    "width": 704,
+    "height": 402,
+    "bytes": 16446,
+    "sha256": "3bf7a111c296f1ad90ff0cf1f18b28f2e8c0274532168b23458386ae2266f8c0",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
+  },
+  {
+    "path": "assets/img/hero-night.webp",
+    "width": 1344,
+    "height": 768,
+    "bytes": 52626,
+    "sha256": "e2eef667fe722451a096fd713bb6df4d1644cf32322c36a53e6606aa7433388d",
+    "origin": "AI-generated atmosphere image; not installation evidence or product reproduction."
   }
 ]

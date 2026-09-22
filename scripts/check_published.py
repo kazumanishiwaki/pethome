@@ -1,80 +1,26 @@
-"""Smoke-test deployed public files from a network-enabled CI runner."""
+"""Verify deployed bytes against the local, validated dist (no answer transmission)."""
 from pathlib import Path
-from html.parser import HTMLParser
-from urllib.parse import urljoin, urlsplit
-from urllib.request import Request, urlopen
+from urllib.request import Request,urlopen
+from urllib.error import URLError
 from hashlib import sha256
-import json
-import sys
-import time
-from generate_review import generate
-
-ROOT = Path(__file__).resolve().parents[1]
-
-class ReviewText(HTMLParser):
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.active = False
-        self.parts = []
-    def handle_starttag(self, tag, attrs):
-        if tag == 'pre' and dict(attrs).get('id') == 'review-text':
-            self.active = True
-    def handle_endtag(self, tag):
-        if tag == 'pre':
-            self.active = False
-    def handle_data(self, data):
-        if self.active:
-            self.parts.append(data)
-
-
-def main():
-    if len(sys.argv) != 2:
-        raise SystemExit('Usage: python3 scripts/check_published.py HTTPS_SITE_URL')
-    base = sys.argv[1].rstrip('/') + '/'
-    if urlsplit(base).scheme != 'https':
-        raise SystemExit('Only an HTTPS deployment URL is accepted')
-    summary = generate()
-    expected = (ROOT/'ai-review.txt').read_text(encoding='utf-8')
-    fingerprint = summary['fingerprint']
-    images = json.loads((ROOT/'data/images.json').read_text(encoding='utf-8'))
-
-    def get(path):
-        url = urljoin(base,path) + '?v=' + fingerprint[:16]
-        request = Request(url,headers={'User-Agent':'pethome-public-check/1.0','Cache-Control':'no-cache'})
-        with urlopen(request, timeout=20) as response:
-            if response.status != 200:
-                raise RuntimeError(f'{path}: HTTP {response.status}')
-            data = response.read(2000001)
-            if len(data) > 2000000:
-                raise RuntimeError(f'{path}: unexpected size')
-            return data
-
-    for attempt in range(1,7):
-        try:
-            info = json.loads(get('build-info.json'))
-            assert info['fingerprint'] == fingerprint, 'CDN is still serving a different snapshot'
-            for name in ('index.html','privacy.html','terms.html','commercial.html','ai-review.html'):
-                assert get(name) == (ROOT/name).read_bytes(), f'{name}: stale or unexpected page'
-            parser = ReviewText()
-            parser.feed(get('ai-review.html').decode('utf-8'))
-            assert ''.join(parser.parts) == expected, 'Review HTML does not contain full text'
-            for ext in ('txt','md'):
-                assert get('ai-review.'+ext).decode('utf-8') == expected, 'Review export mismatch'
-            states = json.loads(get('ai-review-states.json'))
-            assert len(states) == summary['states'] == 48, 'Self-check state count mismatch'
-            for image in images:
-                assert sha256(get(image['path'])).hexdigest() == image['sha256'], 'Image mismatch: '+image['path']
-            for folder in ('assets/css','assets/js','data'):
-                for path in (ROOT/folder).iterdir():
-                    if path.is_file():
-                        assert get(path.relative_to(ROOT).as_posix()) == path.read_bytes(), 'Asset mismatch: '+path.name
-            print(json.dumps({'public_url':base,'html_pages':5,'images':len(images),'self_check_states':len(states),'review_characters':len(expected),'fingerprint':fingerprint,'result':'passed'},ensure_ascii=False))
-            return
-        except (AssertionError, OSError, ValueError, RuntimeError) as error:
-            if attempt == 6:
-                raise
-            print(f'Public check attempt {attempt}: {error}; waiting for propagation.',flush=True)
-            time.sleep(5)
-
-if __name__ == '__main__':
-    main()
+import sys,time
+root=Path(__file__).resolve().parents[1]/'dist'
+base=(sys.argv[1] if len(sys.argv)>1 else 'https://kazumanishiwaki.github.io/pethome/').rstrip('/')+'/'
+paths=['index.html','privacy.html','terms.html','commercial.html','ai-review.html','ai-review.txt','ai-review.md','build-info.json','data/check-results.json','assets/js/check-engine.js','assets/js/site.js','assets/css/site.css','assets/img/hero-night.webp','assets/img/hero-night-small.webp','assets/img/cat-window.webp','assets/img/cat-entrance.webp','assets/img/dog-living.webp']
+for attempt in range(1,10):
+ errors=[]
+ for path in paths:
+  try:
+   local=(root/path).read_bytes()
+   query='?v='+sha256(local).hexdigest()[:16]
+   request=Request(base+path+query,headers={'User-Agent':'pethome-deployment-check','Cache-Control':'no-cache'})
+   with urlopen(request,timeout=25) as response:
+    assert response.status==200
+    remote=response.read()
+   if sha256(remote).digest()!=sha256(local).digest():errors.append(path+': not updated')
+  except (URLError,TimeoutError,AssertionError) as exc:errors.append(path+': '+str(exc))
+ if not errors:
+  print('Public delivery verified: '+base);print('\n'.join(paths));break
+ print(f'Attempt {attempt}: '+', '.join(errors))
+ if attempt==9:raise SystemExit('Published content did not match this build')
+ time.sleep(10)

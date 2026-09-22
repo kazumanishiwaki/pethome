@@ -1,45 +1,41 @@
-# pethome — service concept preview
+# pethome
 
-2026-09-22 content review. Plain HTML/CSS/JavaScript, no build dependency.
+帰ってきた部屋に、居場所がある。
 
-## Positioning
+静的HTML/CSS/JavaScriptのコンセプト公開版。個別相談・写真受付・決済はありません。
 
-既製品を売るのではなく、商品選定・既存家具との配置・取付前の確認を整理する空間プランニング。初期は猫の壁面／猫の出入口／犬の室内の居場所。床全面張り替え・屋外工事・大規模造作は標準範囲から外す。
+## 編集
 
-商品・場所が決まっている取付相談と、組み合わせを考える空間プランを区分する。正式料金・施工店・受付先は未確定なので、販売価格や提携実績を表示しない。
-
-## Current behavior
-
-- Pre-launch notice is visible. No contact transmission, photo upload, payment, analytics, or browser storage.
-- Self-check computes a general starting point in the browser and can save a text memo. It is not a safety diagnosis or quotation.
-- Product references are in `data/products.json`; no affiliation or stock is asserted.
-- Illustrations are explicitly conceptual, not completed works or installation drawings.
-- The original `site.css` is retained; scoped content refinements are in `review.css`.
-
-## Local preview
+- `index.html`: 公開コピー・プラン・導線
+- `privacy.html`, `terms.html`, `commercial.html`: 補足ページ
+- `data/check-results.json`: 4問と8種類の結果、共通修飾子
+- `assets/js/check-engine.js`: 純粋な分岐ロジック
+- `data/products.json`: 参考商品の確認先・説明
+- `data/images.json`: 画像の出自・サイズ・ハッシュ
 
 ```sh
 python3 scripts/build.py
 python3 -m http.server 8080 --directory dist
 ```
 
-Open http://localhost:8080/ . Use an HTTP server for the product JSON; do not rely on file://.
+`http://localhost:8080/` で表示。PythonとNode.jsの標準ライブラリのみでビルドできます。
 
-## Publishing
+## 公開
 
-GitHub Pages: Settings → Pages → Source: GitHub Actions. The workflow builds and validates before publishing `dist` only. An independent `pethome-preview` artifact remains available even if Pages is not enabled.
+GitHub PagesのSourceをGitHub Actionsに設定。mainへのpushで、4問の192入力組み合わせ・8結果・リンク・画像を検証して公開。
+公開後に配信ファイルをハッシュ照合します。Cloudflareにも同じdistを配置できます。
+本営業の利用開始時はホスティングの利用条件も再確認してください。
 
-Public repository visibility does not itself enable Pages. The connector used for content edits does not expose Pages administration. Do not add elevated tokens to the repository or workflow to work around setup.
+## レビュー
 
-GitHub Pages restricts hosting online businesses or sites primarily facilitating commercial transactions. This repository contains a non-transactional, pre-launch concept preview. Confirm the actual use against the policy; use a suitable host such as Cloudflare for the customer-acquisition/ordering service rather than assuming that no checkout means all commercial use is allowed.
+`ai-review.html` / `.txt` / `.md` はビルド時に最新の公開コピーから自動生成します。
+一般向けナビからリンクしません。アクセス制限ではないので、非公開の事業情報を入力に追加しないでください。
 
-- https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
-- https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+## プライバシー
 
-For Cloudflare, use the static `dist` directory. No vendor-specific runtime is required.
+セルフチェック回答はブラウザのメモリ内だけで処理。Cookie、ローカルストレージ、サーバー送信、解析タグはありません。
+TXTは利用者がボタンを押したときだけ生成します。クエリやフラグメントによる初期選択は許可した値だけを扱います。
 
-## Before accepting enquiries
+## 公開前提
 
-Confirm operator and contact information, privacy/AI processing and retention, service and cancellation terms, actual partner coverage and insurance, procurement/returns responsibilities, and validated pricing. Implement and test a real private intake endpoint. Remove noindex only after the launch review. Do not collect room photos through public GitHub issues.
-
-Keep internal margin assumptions, client data, credentials, and partner-negotiation details outside this public repository.
+サービス準備中、料金未確定、施工パートナー未定。掲載画像は生成イメージで、施工実績や特定商品の再現ではありません。

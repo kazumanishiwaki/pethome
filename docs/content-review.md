@@ -1,35 +1,24 @@
-# 公開コンテンツとAIレビュー
+# pethome 公開コンテンツの更新
 
-## 公開URL
+基準日: 2026-09-22
 
-- サービスサイト: https://kazumanishiwaki.github.io/pethome/
-- AIレビュー用全文: https://kazumanishiwaki.github.io/pethome/ai-review.html
-- プレーンテキスト: https://kazumanishiwaki.github.io/pethome/ai-review.txt
-- Markdown: https://kazumanishiwaki.github.io/pethome/ai-review.md
-- セルフチェック全48分岐: https://kazumanishiwaki.github.io/pethome/ai-review-states.json
+## 公開版
 
-## 編集する場所
+「帰ってきた部屋に、居場所がある。」を中心に、帰宅後・留守番の時間軸へ変更。
+窓辺、玄関、犬の一角の3プラン。既製品と小さな取り付けを中心にする。
+サービスは準備中で、個別相談・写真受付・決済を行わない。
 
-本文は `index.html`、参考商品は `data/products.json`、補足ページは `privacy.html` / `terms.html` / `commercial.html` を編集します。
-セルフチェックの実際の結果文言は `assets/js/site.js` が唯一の編集元です。
+## 判断が必要だった差分
 
-`python3 scripts/build.py` は同じ公開ソースからAIレビュー用HTML・TXT・Markdownを自動集約し、公開ファイルだけを `dist/` に出力します。`ai-review.*` を手で変更しないでください。本文は静的HTML内に含まれ、JavaScriptを実行しない読み手でも取得できます。
+- ブランドの共通方針を優先し、英語の装飾ラベルは HOME AFTER HOURS のみ。プラン・受付・サービス名は日本語表示。
+- 分岐表の例より受け入れ条件を優先し、犬かつ遅い帰宅・外泊は全目的で担い手を先に表示。
+- 足元の確認は犬に限らず選べるため、確認文を「ペットの爪、体重、走行する位置」とした。
+- 本文の旧アンカーも残す。プランCTAとURL初期選択の両方をサポート。
+- ヒーローと窓辺には生成済みの夜の室内イメージを使用。ページ文字とボタンはHTMLで、写真とは分離。画像は実績撮影・特定商品の再現ではない。
 
-条件分岐の結果は `scripts/export_review_states.cjs` が実際のフォーム処理をネットワークなしの検証用DOMで実行して取り出します。7つの結果系統は全文テキストにまとめ、48通りの入力・確認事項・保存メモはJSONに保存します。
+## 同期
 
-公開ソースのSHA-256 fingerprintを各出力に含めます。公開後のCIではHTML・テキスト・画像・JSON・CSS・JavaScriptを実際の配信URLから照合します。
-
-## 写真の扱い
-
-3枚は会話内で生成したAIコンセプト画像です。実際の施工事例、メーカー公認の設置図、特定製品の正確な写真として扱わないでください。植物、小物、ゲートの隙間、ステップの間隔などを推奨仕様と解釈しないことを本文でも明示しています。
-
-- `assets/img/cat-wall.webp`: トップ・猫の壁面と窓辺
-- `assets/img/cat-entrance.webp`: 猫の玄関と出入口
-- `assets/img/dog-living.webp`: 犬の居場所
-
-各画像は4:3の比率を維持した1408×1056pxと704×528pxのWebPです。`-small.webp` をsrcsetで使用します。ファイルはGitHub内に保存され、期限付きURLや外部画像ホストに依存しません。
-`data/images.json` はサイズとSHA-256を記録します。差し替える場合は画像とマニフェストを同時更新してください。
-
-## 集約対象外
-
-非公開の事業計画、粗利・収益仮説、個人情報、顧客写真、認証情報、社内資料は入力対象にしません。レビュー用ページも公開ページです。`noindex` は閲覧制限ではありません。
+`index.html` と補足3ページが本文の正本。
+質問・結果文言は `data/check-results.json`、純粋な分岐は `assets/js/check-engine.js`。
+`python3 scripts/build.py` でAIレビュー用HTML/TXT/Markdownと入力検証を更新。
+集約ページは一般向けナビに置かない。ただしURLを知る人は閲覧できるので、公開可能な内容だけを使用する。

@@ -1,0 +1,23 @@
+{
+  "viewports": [
+    320,
+    390,
+    640,
+    768,
+    1024,
+    1440
+  ],
+  "input_combinations": 192,
+  "checks": [
+    "All result UI states and no answer transmission",
+    "Hash prefill and TXT local download",
+    "Plan prefill and stale result reset",
+    "Product filters",
+    "Invalid prefill and missing required answers",
+    "Review aggregation and clipboard fallback",
+    "Supplemental pages",
+    "No-JS submit disabled"
+  ],
+  "console_errors": [],
+  "mode": "offline static HTML with local resource fixtures; no network permissions changed"
+}
