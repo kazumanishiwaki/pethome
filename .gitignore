@@ -1,3 +1,8 @@
 dist/
 node_modules/
 .DS_Store
+__pycache__/
+/ai-review.html
+/ai-review.txt
+/ai-review.md
+/ai-review-states.json

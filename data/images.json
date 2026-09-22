@@ -1,0 +1,50 @@
+[
+  {
+    "path": "assets/img/cat-wall.webp",
+    "sha256": "43ee34a6ae9b79c0cba4ed6c283900075bc27d64d24d39dc1d625669161da960",
+    "width": 1408,
+    "height": 1056,
+    "bytes": 149838,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  },
+  {
+    "path": "assets/img/cat-wall-small.webp",
+    "sha256": "f673ca5b69ed7699bf1117e4dbf193dc2c8e542fc7019aa3c9a06bdbd59281ef",
+    "width": 704,
+    "height": 528,
+    "bytes": 44488,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  },
+  {
+    "path": "assets/img/cat-entrance.webp",
+    "sha256": "44409d55f6ad3891273e5c25158b374f5b4c4a020f2483838dcaccdb6efc45b2",
+    "width": 1408,
+    "height": 1056,
+    "bytes": 118962,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  },
+  {
+    "path": "assets/img/cat-entrance-small.webp",
+    "sha256": "35da2a3bc15a6df5cc0506d4e99a024b6048c247f9015825ebbe8b4813919edb",
+    "width": 704,
+    "height": 528,
+    "bytes": 39110,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  },
+  {
+    "path": "assets/img/dog-living.webp",
+    "sha256": "8eca9d5b0fe3551986672fb8cec06668beae5212ed12e362e6237a966f1f56f1",
+    "width": 1408,
+    "height": 1056,
+    "bytes": 169110,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  },
+  {
+    "path": "assets/img/dog-living-small.webp",
+    "sha256": "a38b8a5ab10baa073d3c10836408f8c0ce76db21fedbfb2a64189136b4d5a197",
+    "width": 704,
+    "height": 528,
+    "bytes": 52384,
+    "origin": "AI-generated concept image; not installation evidence or product photography"
+  }
+]
