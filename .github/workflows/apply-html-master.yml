@@ -1,0 +1,58 @@
+name: Apply validated pethome HTML master
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/apply-html-master.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Download the approved public-source package
+        run: |
+          curl --fail --location --retry 2 --max-time 90 'https://at.adobe.com/bHfidXI6Yw9N5Xcq' -o /tmp/pethome-html.zip
+          echo '39840092c46ff88be325d6e001b839e365871c48e8ecf31cf0ecdaf68107d480  /tmp/pethome-html.zip' | sha256sum --check
+      - name: Apply only validated source files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          from hashlib import sha256
+          from zipfile import ZipFile
+          import json, subprocess
+          root = Path.cwd()
+          allowed = {'.gitignore', '404.html', 'README.md', 'assets/css/site.css', 'assets/img/cat-window-small.webp', 'assets/img/cat-window.webp', 'assets/img/hero-night-small.webp', 'assets/img/hero-night.webp', 'assets/js/check-engine.js', 'assets/js/site.js', 'commercial.html', 'data/check-results.json', 'data/images.json', 'data/products.json', 'docs/content-review.md', 'docs/qa-2026-09-22.json', 'index.html', 'privacy.html', 'scripts/build.py', 'scripts/check_published.py', 'scripts/export_review_states.cjs', 'scripts/generate_review.py', 'terms.html'}
+          remove = {'assets/css/review.css', 'assets/css/imagery.css'}
+          with ZipFile('/tmp/pethome-html.zip') as archive:
+              manifest = json.loads(archive.read('update-manifest.json'))
+              assert manifest['base_commit'] == '1e89e54d4aa6630585ef956770690dfc6cb3ec6e'
+              parent = subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
+              assert parent == manifest['base_commit'], 'The source branch changed; reconcile before applying.'
+              assert set(manifest['files']) == allowed and set(manifest['delete']) == remove
+              assert set(archive.namelist()) == allowed | {'update-manifest.json'}
+              assert len(archive.namelist()) == len(allowed) + 1
+              assert sum(i.file_size for i in archive.infolist()) < 5000000
+              for name in allowed:
+                  path = PurePosixPath(name)
+                  assert not path.is_absolute() and '..' not in path.parts
+                  raw = archive.read(name)
+                  assert sha256(raw).hexdigest() == manifest['files'][name], name
+                  target = root / name
+                  assert not target.is_symlink()
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(raw)
+              for name in remove:
+                  (root/name).unlink(missing_ok=True)
+          subprocess.run(['python3','scripts/build.py'],check=True)
+          subprocess.run(['git','add','--',*sorted(allowed | remove)],check=True)
+          PY
+      - name: Commit the tested sources without force-pushing
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: implement home-after-hours HTML and four-question local check'
+          git push origin HEAD:main
